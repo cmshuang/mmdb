@@ -1,6 +1,9 @@
 import django_tables2 as tables
 from django.urls import reverse
 from django.utils.html import format_html
+from django_filters.views import FilterView
+from django_tables2.views import SingleTableMixin
+from .filters import PoseFilter
 from .models import *
 
 class PoseTable(tables.Table):
@@ -15,4 +18,9 @@ class PoseTable(tables.Table):
         sequence = ('virus_name', 'protein_name', 'zinc_id', 'num_atoms', 'sdf_file_link', 'binding_affinity')
 
 
-    
+class FilteredPoseView(SingleTableMixin, FilterView):
+    table_class = PoseTable
+    model = Pose
+    template_name = "search/includes/filtered_table.html"
+
+    filterset_class = PoseFilter

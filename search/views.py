@@ -4,7 +4,7 @@ import mimetypes
 from django.views.generic import ListView
 from .filters import PoseFilter
 from .models import Pose
-from .tables import PoseTable
+from .tables import *
 from django.urls import reverse
 
 # Create your views here.
@@ -12,6 +12,13 @@ from django.urls import reverse
 def pose_list(request):
     table = PoseTable(Pose.objects.all())
     return render(request, "search/includes/search_result_test.html", {"table": table})
+
+def filtered_pose_table(request):
+    poses = Pose.objects.all()
+    my_filter = PoseFilter(request.GET, queryset=poses)
+    poses = my_filter.qs
+    table = PoseTable(poses)
+    return render(request, "search/includes/filtered_table.html", {"table": table, 'filter': my_filter})
 
 class PoseListView(ListView):
     model = Pose
