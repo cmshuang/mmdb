@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django_filters.views import FilterView
 from django_tables2.views import SingleTableMixin
+from django.contrib.sites.models import Site
 from .filters import PoseFilter
 from .models import *
 
@@ -16,6 +17,9 @@ class PoseTable(tables.Table):
         model = Pose
         fields = ("binding_affinity",)
         sequence = ('virus_name', 'protein_name', 'zinc_id', 'num_atoms', 'sdf_file_link', 'binding_affinity')
+
+    def value_sdf_file_link(self, record):
+        return Site.objects.get_current().domain + reverse('download', kwargs={'filename': record.sdf_file})
 
 
 class FilteredPoseView(SingleTableMixin, FilterView):

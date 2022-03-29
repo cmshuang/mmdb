@@ -1,5 +1,6 @@
 {% extends 'search/base/base.html' %}
 {% load render_table from django_tables2 %}
+{% load export_url from django_tables2 %}
 {% load bootstrap3 %}
 {% load static %}
 
@@ -15,6 +16,7 @@ Search Results
         {% bootstrap_button 'filter' %}
     </form>
     {% endif %}
+    <a href="{% export_url "csv" %}" class="button">Download CSV</a> <form action="" method="POST">{% csrf_token %}<button>Download All SDF Files</button></form>
     {% render_table table 'django_tables2/bootstrap.html' %}
 </section>
 {% endblock %}

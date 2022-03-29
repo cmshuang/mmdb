@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SITE_ID = 1
 
 # Application definition
 
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'django_tables2',
     'django_filters',
     'bootstrap3',
@@ -73,12 +75,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mmdb.wsgi.application'
 
-
+DATABASE_ROUTERS = ['search.routers.SearchRouter']
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    },
+    'search': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'sars_molecular_modeling',
         'USER': 'sars_molecular_modeling_ro',
