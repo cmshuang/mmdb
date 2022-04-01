@@ -14,14 +14,11 @@ import zipfile
 from io import StringIO, BytesIO
 # Create your views here.
 
-filepath = '/global/cfs/cdirs/m3718/'
-
-def pose_list(request):
-    table = PoseTable(Pose.objects.all())
-    return render(request, "search/includes/search_result_test.html", {"table": table})
+filepath = '/global/cfs/cdirs/m3718/OpeNNdd/pose_sdf/' #Hard-coded directory for where all downloadable files are stored.
 
 def filtered_pose_table(request):
-    poses = Pose.objects.all()
+    #poses = Pose.objects.all()
+    poses = Pose.objects.filter(id__lt=500) #For the sake of demonstration, limit to the first 500 entries
     my_filter = PoseFilter(request.GET, queryset=poses)
     poses = my_filter.qs
     table = PoseTable(poses)
@@ -61,22 +58,7 @@ def filtered_pose_table(request):
 
     return render(request, "search/includes/filtered_table.html", {"table": table, 'filter': my_filter})
 
-class PoseListView(ListView):
-    model = Pose
-    template_name = 'search/includes/search_result_test.html'
-
 def render_download(request, filename):
-    #filepath = '/global/cfs/cdirs/m3718/'
-    fl = open(filepath + filename, 'r')
-    mime_type, _ = mimetypes.guess_type(filepath)
-    response = HttpResponse(fl, content_type=mime_type)
-    response['Content-Disposition'] = "attachment; filename=%s" % filename
-    return response
-
-def download_test(request):
-    #filepath = '/global/cfs/cdirs/m3718/'
-    filename = 'SARS_3CLpro_5c5o_ActiveSiteAtomsOnly.pdb'
-
     fl = open(filepath + filename, 'r')
     mime_type, _ = mimetypes.guess_type(filepath)
     response = HttpResponse(fl, content_type=mime_type)
