@@ -1,22 +1,58 @@
-{% extends 'search/base/base.html' %}
+{% load bootstrap3 %}
 {% load render_table from django_tables2 %}
 {% load export_url from django_tables2 %}
-{% load bootstrap3 %}
 {% load static %}
 
-{% block main_heading %}
-Search Results
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block body %}
-<section>
-    {% if filter %}
-    <form action="" method="get" class="form form-inline">
-        {% bootstrap_form filter.form layout='inline' %}
-        {% bootstrap_button 'filter' %}
-    </form>
-    {% endif %}
-    <a href="{% export_url "csv" %}" class="button">Download CSV</a> <form action="" method="POST">{% csrf_token %}<button>Download All SDF Files</button></form>
-    {% render_table table 'django_tables2/bootstrap.html' %}
-</section>
-{% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viral Protein Molecular Docking Database</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
+</head>
+<style>
+    .hero-image {
+      background-image: url({% static 'search/assets/website_header_template.png' %});
+      background-color: #cccccc;
+      height: 400px;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      position: relative;
+    }
+    
+    .hero-text {
+      text-align: center;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+    }
+</style>
+<body>
+    <nav>{% bootstrap_icon "home" %} <a href="{% url 'home' %}" id="">Home</a></nav>
+    <div class="hero-image">
+        <div class="hero-text">
+            <h1 style="font-size:50px; font-family: 'Nunito'; font-weight: 800;">Viral Protein Molecular Docking Database</h1>
+        </div>
+    </div>
+    <main>
+        <section style="padding: 2em 0 2em 0">
+            {% if filter %}
+            <form action="" method="get" class="form form-inline">
+                {% bootstrap_form filter.form %}
+                {% bootstrap_button 'Filter' %}
+            </form>
+            {% endif %}
+            <div align="right"><a href="{% export_url "csv" %}" class="btn btn-primary" role="button">Download CSV</a>
+            <form action="" method="POST">{% csrf_token %}{% bootstrap_button 'Download SDF Files as Zip' button_class="btn-info" %}</form></div>
+            {% render_table table 'django_tables2/bootstrap.html' %}
+        </section>
+    </main>
+</body>
+</html>
