@@ -13,7 +13,7 @@ class PoseTable(tables.Table):
     virus_name = tables.Column(verbose_name="Virus Name", accessor='protein.virus_name')
     protein_name = tables.Column(verbose_name = "Protein (pdb file)", accessor='protein.protein_name', linkify=('download', [tables.A('protein.pdb_file')]), empty_values=())
     protein_active_site = tables.Column(verbose_name="Protein Active Site Coordinates", accessor='protein.coor_file', linkify=('download', [tables.A('protein.coor_file')]), empty_values=())
-    sdf_file_link = tables.Column(verbose_name="Pose SDF file", accessor="sdf_file", linkify=('download', [tables.A('sdf_file')]), empty_values=())
+    sdf_file_link = tables.Column(verbose_name="Pose SDF File", accessor="sdf_file", linkify=('download', [tables.A('sdf_file')]), empty_values=())
     binding_affinity=tables.Column(verbose_name="Binding Affinity")
     class Meta:
         model = Pose
