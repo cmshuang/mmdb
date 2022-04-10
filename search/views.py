@@ -17,18 +17,21 @@ from io import StringIO, BytesIO
 filepath = '/global/cfs/cdirs/m3718/OpeNNdd/pose_sdf/' #Hard-coded directory for where all downloadable files are stored.
 
 def filtered_pose_table(request):
+    """View for search page"""
     #poses = Pose.objects.all()
     poses = Pose.objects.filter(id__lt=500) #For the sake of demonstration, limit to the first 500 entries
-    my_filter = PoseFilter(request.GET, queryset=poses)
-    poses = my_filter.qs
-    table = PoseTable(poses)
-    RequestConfig(request).configure(table)
+    my_filter = PoseFilter(request.GET, queryset=poses) #Filter poses from form requeset
+    poses = my_filter.qs #Get queryset from filter
+    table = PoseTable(poses) #Generate table from filtered qs
 
+    #Accept export data request if given, return download response
+    RequestConfig(request).configure(table)
     export_format = request.GET.get("_export", None)
     if TableExport.is_valid_format(export_format):
         exporter = TableExport(export_format, table)
         return exporter.response("table.{}".format(export_format))
 
+    #If SDF zip file download button pressed
     if request.method == 'POST':
         zip_subdir = "poses"
         zip_filename = "%s.zip" % zip_subdir
@@ -56,9 +59,11 @@ def filtered_pose_table(request):
 
         return response
 
+    #Render the html template for display, passing in the table and filter
     return render(request, "search/includes/filtered_table.html", {"table": table, 'filter': my_filter})
 
 def render_download(request, filename):
+    """View for file download"""
     fl = open(filepath + filename, 'r')
     mime_type, _ = mimetypes.guess_type(filepath)
     response = HttpResponse(fl, content_type=mime_type)

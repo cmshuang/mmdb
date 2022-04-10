@@ -15,6 +15,7 @@ class Ligand(models.Model):
     cansmi = models.CharField(max_length=200)
     nb_atoms = models.PositiveIntegerField()
     sdf_file = models.CharField(max_length=100)
+    pose_count = models.PositiveIntegerField()
 
     class Meta:
         managed = False
