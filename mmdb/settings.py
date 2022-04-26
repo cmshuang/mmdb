@@ -80,10 +80,12 @@ DATABASE_ROUTERS = ['search.routers.SearchRouter']
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
+    # For everything that's not accessing the molecular modeling database
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     },
+    # For accessing the molecular modeling database
     'search': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'sars_molecular_modeling',
